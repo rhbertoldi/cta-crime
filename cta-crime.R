@@ -5,8 +5,7 @@ library(snakecase)
 library(lubridate)
 library(gapminder)
 library(gganimate)
-
-setwd("C:/Users/User02/Desktop/Harris/CTA_Data_Project")
+library(here)
 
 # sfc_as_cols function from  mountainMath/cancensusHelpers
 sfc_as_cols <- function(x, geometry, names = c("x","y")) {
@@ -24,14 +23,14 @@ sfc_as_cols <- function(x, geometry, names = c("x","y")) {
   dplyr::bind_cols(x,ret)
 }
 
-railstations <- st_read("CTA_RailStations/CTA_RailStations.shp") %>%
+railstations <- st_read(here("CTA_RailStations/CTA_RailStations.shp")) %>%
   set_names(to_snake_case(colnames(.))) %>%
   st_set_crs(102671) %>%
   st_transform(2163) %>%
   st_buffer(100) %>%
   select(longname, lines, gtfs, geometry)
 
-crimes <- read_csv("crimes_2001.csv") %>%
+crimes <- read_csv(here("crimes_2001.csv")) %>%
   set_names(to_snake_case(colnames(.)))
 
 crimes_fil <- crimes %>%
@@ -53,7 +52,7 @@ crimes_fil <- crimes %>%
   ) %>%
   select(id, date, primary_type, month, year, latitude, longitude)
 
-stations <- st_read("CTA_RailStations/CTA_RailStations.shp") %>%
+stations <- st_read(here("CTA_RailStations/CTA_RailStations.shp")) %>%
   set_names(to_snake_case(colnames(.))) %>%
   st_set_crs(102671) %>%
   st_transform(2163) %>%
@@ -74,7 +73,7 @@ line_color <- railstations %>%
   select(lines, gtfs) %>%
   st_set_geometry(NULL)
 
-rail_lines <- st_read("CTA_RailLines/CTA_RailLines.shp") %>%
+rail_lines <- st_read(here("CTA_RailLines/CTA_RailLines.shp")) %>%
   set_names(to_snake_case(colnames(.))) %>%
   st_transform(2163)
 
@@ -94,21 +93,26 @@ p <- crimes_per_stop %>%
                                 "Purple Line, Evanston Express" = "purple",
                                 "Red, Brown, Purple (Express)" = "red",
                                 "Green Line (Englewood)" = "green",
-                                "Brown, Orange, Pink, Putple (Express), Green, Blue" = "brown",
+                                "Brown, Orange, Pink, Putple (Express), Green,
+                                Blue" = "brown",
                                 "Brown, Purple (Express)" = "brown",
                                 "Blue Line" = "blue",
-                                "Brown, Orange, Pink, Purple (Express)" = "brown",
+                                "Brown, Orange, Pink,
+                                Purple (Express)" = "brown",
                                 "Green (Lake), Pink" = "green",
                                 "Green (Lake), Pink" = "green",
                                 "Blue Line (Congress)" = "blue",
                                 "Pink" = 'pink',
-                                "Brown, Orange, Pink, Purple (Express), Green" = "brown",
+                                "Brown, Orange, Pink, Purple (Express),
+                                Green" = "brown",
                                 "Red, Yellow, Purple, Evanston Express" = "red",
                                 "Orange & Green Lines" = "orange",
                                 "Blue Line (Forest Park)" = "blue",
                                 "Brown, Purple (Express), Red" = "red",
-                                "Brown, Green, Orange, Pink, Purple (Exp)" = "brown",
-                                "Brown, Orange, Pink, Purple (Express)" = "brown",
+                                "Brown, Green, Orange, Pink,
+                                Purple (Exp)" = "brown",
+                                "Brown, Orange, Pink,
+                                Purple (Express)" = "brown",
                                 "Green, Orange" = "green",
                                 "Green, Pink" = "green",
                                 "Purple Line" = "purple",
