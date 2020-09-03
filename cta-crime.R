@@ -30,6 +30,10 @@ railstations <- st_read(here("CTA_RailStations/CTA_RailStations.shp")) %>%
   st_buffer(100) %>%
   select(longname, lines, gtfs, geometry)
 
+boundaries <- st_read(
+  here("boundaries/geo_export_e4665ccc-d917-4b76-9f2a-f950a767efe5.shp")) %>%
+  st_transform(2163)
+
 crimes <- read_csv(here("crimes_2001.csv")) %>%
   set_names(to_snake_case(colnames(.)))
 
@@ -80,7 +84,8 @@ rail_lines <- st_read(here("CTA_RailLines/CTA_RailLines.shp")) %>%
 p <- crimes_per_stop %>%
   left_join(line_color, by = "gtfs") %>%
   ggplot() +
-  geom_sf(data = rail_lines, aes(color = lines), alpha = .5) +
+  geom_sf(data = rail_lines, aes(color = lines), alpha = .2) +
+  geom_sf(data = boundaries, alpha = 0) +
   geom_point(aes(x = longitude, y = latitude,
                  size = crime_count, group = gtfs, color = lines)) +
   scale_color_manual(values = c("Green Line" = "green",
